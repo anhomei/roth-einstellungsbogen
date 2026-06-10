@@ -508,11 +508,6 @@
                         <input type="tel" id="telefon" name="telefon" required>
                         <span class="error-message"></span>
                     </div>
-                    <div class="form-group">
-                        <label for="email" class="required">E-Mail</label>
-                        <input type="email" id="email" name="email" required>
-                        <span class="error-message"></span>
-                    </div>
                 </div>
 
                 <div class="form-row two-col">
@@ -713,7 +708,7 @@
                 </div>
             </div>
 
-            <!-- 4. BESCHÄFTIGUNGSVERHÄLTNIS -->
+            <!-- 4. BESCHÄFTIGUNGSVERHÄLTNIS (STARK GEKÜRZT) -->
             <div class="section">
                 <div class="section-title">
                     <div class="section-number">4</div>
@@ -787,55 +782,9 @@
                         <textarea id="weitere_beschaeftigungen" name="weitere_beschaeftigungen" placeholder="Arbeitgeber, Art und Umfang"></textarea>
                     </div>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="vorbeschaeftigungen">Vorbeschäftigungen im laufenden Kalenderjahr</label>
-                        <textarea id="vorbeschaeftigungen" name="vorbeschaeftigungen" placeholder="Arbeitgeber, Zeitraum"></textarea>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="baugewerbe">Bereits im Baugewerbe beschäftigt?</label>
-                        <select id="baugewerbe" name="baugewerbe">
-                            <option value="nein">Nein</option>
-                            <option value="ja">Ja</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="soka_bau_group" style="display: none;">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="soka_bau_nr">SOKA-BAU-Arbeitnehmernummer</label>
-                            <input type="text" id="soka_bau_nr" name="soka_bau_nr">
-                            <span class="help-text">Urlaubsnachweis unter „Anlagen" hochladen</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="sozialleistungen">Bezug von Renten- oder Sozialleistungen (z. B. Rente, ALG)?</label>
-                        <select id="sozialleistungen" name="sozialleistungen">
-                            <option value="nein">Nein</option>
-                            <option value="ja">Ja</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="sozialleistungen_art_group" style="display: none;">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="sozialleistungen_art">Art der Leistung</label>
-                            <input type="text" id="sozialleistungen_art" name="sozialleistungen_art">
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <!-- 5. QUALIFIKATIONEN -->
+            <!-- 5. QUALIFIKATIONEN (INKL. BAUGEWERBE) -->
             <div class="section">
                 <div class="section-title">
                     <div class="section-number">5</div>
@@ -950,13 +899,33 @@
                         <input type="text" id="handschuhe" name="handschuhe" placeholder="z. B. 9">
                     </div>
                 </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="baugewerbe">Bereits im Baugewerbe beschäftigt?</label>
+                        <select id="baugewerbe" name="baugewerbe">
+                            <option value="nein">Nein</option>
+                            <option value="ja">Ja</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="soka_bau_group" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="soka_bau_nr">SOKA-BAU-Arbeitnehmernummer</label>
+                            <input type="text" id="soka_bau_nr" name="soka_bau_nr">
+                            <span class="help-text">Urlaubsnachweis unter „Anlagen" hochladen</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- 6. BANKVERBINDUNG -->
+            <!-- 6. BANKVERBINDUNG (GEKÜRZT) -->
             <div class="section">
                 <div class="section-title">
                     <div class="section-number">6</div>
-                    Bankverbindung & Vermögenswirksame Leistungen
+                    Bankverbindung
                 </div>
 
                 <div class="form-row">
@@ -976,26 +945,6 @@
                     <div class="form-group">
                         <label for="kontoinhaber">Kontoinhaber (falls abweichend)</label>
                         <input type="text" id="kontoinhaber" name="kontoinhaber">
-                    </div>
-                </div>
-
-                <div class="form-row two-col">
-                    <div class="form-group">
-                        <label for="vwl">VWL-Vertrag vorhanden?</label>
-                        <select id="vwl" name="vwl">
-                            <option value="nein">Nein</option>
-                            <option value="ja">Ja</option>
-                        </select>
-                        <span class="help-text">Bescheinigung unter „Anlagen" hochladen</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="betriebliche_altersvorsorge">Betriebliche Altersvorsorge / Entgeltumwandlung?</label>
-                        <select id="betriebliche_altersvorsorge" name="betriebliche_altersvorsorge">
-                            <option value="">-- Bitte wählen --</option>
-                            <option value="ja">Ja</option>
-                            <option value="nein">Nein</option>
-                        </select>
-                        <span class="help-text">Tarifliche Zusatzversorgung Bau läuft über SOKA-BAU</span>
                     </div>
                 </div>
             </div>
@@ -1144,19 +1093,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="anlage_vwl">VWL-Bescheinigung des Anbieters (falls zutreffend)</label>
-                    <div class="file-upload">
-                        <label for="anlage_vwl" class="file-upload-label">
-                            <div class="file-upload-text">
-                                📄 Klicken zum Hochladen oder Datei hierherziehen
-                            </div>
-                        </label>
-                        <input type="file" id="anlage_vwl" name="anlage_vwl" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
-                        <div class="file-name"></div>
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <label for="anlage_privat_versich">Nachweis private Krankenversicherung (falls zutreffend)</label>
                     <div class="file-upload">
                         <label for="anlage_privat_versich" class="file-upload-label">
@@ -1170,10 +1106,10 @@
                 </div>
             </div>
 
-            <!-- 10. ERKLÄRUNG UND DATENSCHUTZ -->
+            <!-- 9. ERKLÄRUNG UND DATENSCHUTZ -->
             <div class="section">
                 <div class="section-title">
-                    <div class="section-number">10</div>
+                    <div class="section-number">9</div>
                     Erklärung & Datenschutz
                 </div>
 
@@ -1201,7 +1137,6 @@
         const progressFill = document.querySelector('.progress-fill');
         const consentCheckbox = document.getElementById('consent');
 
-        // Conditional visibility helpers
         function toggleElement(trigger, target, triggerValue) {
             const element = document.getElementById(target);
             if (element) {
@@ -1209,26 +1144,22 @@
             }
         }
 
-        // Steuer-ID validation (11 digits)
         function validateSteuerId(value) {
             const cleaned = value.replace(/\s/g, '');
             return /^\d{11}$/.test(cleaned);
         }
 
-        // IBAN validation (DE + 20 digits)
         function validateIBAN(value) {
             const cleaned = value.replace(/\s/g, '').toUpperCase();
             return /^DE\d{20}$/.test(cleaned);
         }
 
-        // Versicherungsnummer validation (12 chars with spaces)
         function validateVersicherungsnummer(value) {
-            if (!value) return true; // Optional
+            if (!value) return true;
             const cleaned = value.replace(/\s/g, '');
             return /^\d{10}[A-Z]\d{3}$/.test(cleaned);
         }
 
-        // File size validation
         function validateFileSize(input) {
             if (!input.files.length) return true;
             const file = input.files[0];
@@ -1236,7 +1167,6 @@
             return file.size <= maxSize;
         }
 
-        // Form validation
         function validateField(field) {
             const errorElement = field.parentElement.querySelector('.error-message');
             field.parentElement.classList.remove('error');
@@ -1264,11 +1194,6 @@
                     isValid = false;
                     errorMsg = 'Format: 12 Zeichen (z. B. 12 123456 A 123)';
                 }
-            } else if (field.type === 'email' && field.value) {
-                if (!field.value.includes('@')) {
-                    isValid = false;
-                    errorMsg = 'Gültige E-Mail erforderlich';
-                }
             }
 
             if (!isValid) {
@@ -1282,7 +1207,6 @@
             return isValid;
         }
 
-        // File validation
         function validateFileInput(input) {
             if (!input.files.length) return true;
             if (!validateFileSize(input)) {
@@ -1296,7 +1220,6 @@
             return true;
         }
 
-        // File upload display
         document.querySelectorAll('input[type="file"]').forEach(input => {
             input.addEventListener('change', (e) => {
                 const fileNameElement = input.parentElement.querySelector('.file-name');
@@ -1312,7 +1235,6 @@
             });
         });
 
-        // Conditional field visibility
         document.getElementById('nicht_eu').addEventListener('change', (e) => {
             toggleElement(e.target, 'aufenthaltstitel_group', 'ja');
         });
@@ -1340,10 +1262,6 @@
             toggleElement(e.target, 'soka_bau_group', 'ja');
         });
 
-        document.getElementById('sozialleistungen').addEventListener('change', (e) => {
-            toggleElement(e.target, 'sozialleistungen_art_group', 'ja');
-        });
-
         document.getElementById('sonstiges_nachweis').addEventListener('change', (e) => {
             const textGroup = document.getElementById('weitere_nachweise_text_group');
             if (textGroup) {
@@ -1351,11 +1269,9 @@
             }
         });
 
-        // Form submission
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            // Validate all required fields
             const requiredFields = form.querySelectorAll('[required]');
             let isFormValid = true;
 
@@ -1365,7 +1281,6 @@
                 }
             });
 
-            // Validate optional fields with format constraints
             const optionalValidations = [
                 { field: document.getElementById('steuer_id'), validator: validateSteuerId },
                 { field: document.getElementById('iban'), validator: validateIBAN },
@@ -1380,14 +1295,12 @@
                 }
             });
 
-            // Validate file sizes
             document.querySelectorAll('input[type="file"]').forEach(input => {
                 if (!validateFileInput(input)) {
                     isFormValid = false;
                 }
             });
 
-            // Validate consent
             if (!consentCheckbox.checked) {
                 consentCheckbox.parentElement.classList.add('error');
                 const errorMsg = consentCheckbox.parentElement.querySelector('.error-message');
@@ -1398,13 +1311,15 @@
                 isFormValid = false;
             } else {
                 consentCheckbox.parentElement.classList.remove('error');
+                const errorMsg = consentCheckbox.parentElement.querySelector('.error-message');
+                if (errorMsg) {
+                    errorMsg.classList.remove('show');
+                }
             }
 
             if (isFormValid) {
-                // Submit form to Netlify
                 form.submit();
             } else {
-                // Scroll to first error
                 const firstError = form.querySelector('.error-message.show');
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1412,7 +1327,6 @@
             }
         });
 
-        // Real-time validation on blur
         document.querySelectorAll('input, select, textarea').forEach(field => {
             field.addEventListener('blur', () => {
                 if (field.hasAttribute('required') || field.id === 'steuer_id' || field.id === 'iban' || field.id === 'versicherungsnummer') {
@@ -1421,7 +1335,6 @@
             });
         });
 
-        // Progress bar
         function updateProgress() {
             const totalFields = form.querySelectorAll('input[required], select[required], textarea[required]').length;
             const filledFields = Array.from(form.querySelectorAll('input[required], select[required], textarea[required]')).filter(field => field.value.trim()).length;
@@ -1432,7 +1345,6 @@
         form.addEventListener('input', updateProgress);
         form.addEventListener('change', updateProgress);
 
-        // Drag and drop for files
         document.querySelectorAll('.file-upload').forEach(upload => {
             const input = upload.querySelector('input[type="file"]');
             const label = upload.querySelector('.file-upload-label');
