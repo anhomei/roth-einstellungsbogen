@@ -3,9 +3,7 @@ const nodemailer = require('nodemailer');
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 
-// E-Mail Konfiguration
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -14,44 +12,33 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// PDF generieren
-function generatePDF(data, fileName) {
+// PDF im RAM generieren (Buffer, nicht auf Disk)
+function generatePDFBuffer(data) {
   return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({
-      size: 'A4',
-      margin: 40
-    });
+    const chunks = [];
+    const doc = new PDFDocument({ size: 'A4', margin: 40 });
 
-    const tmpFile = path.join(os.tmpdir(), fileName);
-    const stream = fs.createWriteStream(tmpFile);
-
+    doc.on('data', chunk => chunks.push(chunk));
     doc.on('error', reject);
-    stream.on('error', reject);
-    stream.on('finish', () => resolve(tmpFile));
+    doc.on('end', () => resolve(Buffer.concat(chunks)));
 
-    // Header
+    // Inhalt
     doc.fontSize(20).font('Helvetica-Bold').text('Roth GmbH', { align: 'center' });
-    doc.fontSize(14).text('Onboarding-Formular Personalfragebogen', { align: 'center' });
+    doc.fontSize(14).text('Onboarding-Formular', { align: 'center' });
     doc.moveDown(0.5);
     doc.fontSize(10).text('Eingereicht: ' + new Date().toLocaleDateString('de-DE'), { align: 'right' });
     doc.moveTo(40, doc.y).lineTo(555, doc.y).stroke();
     doc.moveDown(1);
 
-    // Persönliche Angaben
-    const familienname = data.familienname || '-';
-    const vorname = data.vorname || '-';
-
     doc.fontSize(12).font('Helvetica-Bold').text('Persönliche Angaben');
     doc.fontSize(10).font('Helvetica');
-    doc.text(`Name: ${familienname}, ${vorname}`, { indent: 20 });
+    doc.text(`Name: ${data.familienname || '-'}, ${data.vorname || '-'}`, { indent: 20 });
     doc.text(`Geburtsdatum: ${data.geburtsdatum || '-'}`, { indent: 20 });
     doc.text(`Geburtsort: ${data.geburtsort || '-'}`, { indent: 20 });
     doc.text(`Anschrift: ${data.strasse || '-'}, ${data.plz || ''} ${data.ort || ''}`, { indent: 20 });
     doc.text(`Telefon: ${data.telefon || '-'}`, { indent: 20 });
-    doc.text(`Staatsangehörigkeit: ${data.staatsangehoerigkeit || '-'}`, { indent: 20 });
     doc.moveDown(0.5);
 
-    // Beschäftigungsverhältnis
     doc.fontSize(12).font('Helvetica-Bold').text('Beschäftigungsverhältnis');
     doc.fontSize(10).font('Helvetica');
     doc.text(`Eintrittsdatum: ${data.eintrittsdatum || '-'}`, { indent: 20 });
@@ -59,68 +46,66 @@ function generatePDF(data, fileName) {
     doc.text(`Arbeitnehmergruppe: ${data.arbeitnehmergruppe || '-'}`, { indent: 20 });
     doc.moveDown(0.5);
 
-    // Sozialversicherung
-    doc.fontSize(12).font('Helvetica-Bold').text('Sozialversicherung');
+    doc.fontSize(12).font('Helvetica-Bold').text('Sozialversicherung & Steuern');
     doc.fontSize(10).font('Helvetica');
     doc.text(`Versicherungsnummer: ${data.versicherungsnummer || '-'}`, { indent: 20 });
     doc.text(`Krankenkasse: ${data.krankenkasse || '-'}`, { indent: 20 });
+    doc.text(`Steuer-ID: ${data.steuer_id || '-'}`, { indent: 20 });
     doc.moveDown(0.5);
 
-    // Steuerliche Angaben
-    doc.fontSize(12).font('Helvetica-Bold').text('Steuerliche Angaben');
+    doc.fontSize(12).font('Helvetica-Bold').text('Bankverbindung');
     doc.fontSize(10).font('Helvetica');
-    doc.text(`Steuer-ID: ${data.steuer_id || '-'}`, { indent: 20 });
     doc.text(`IBAN: ${data.iban || '-'}`, { indent: 20 });
+    doc.text(`Bank: ${data.bank || '-'}`, { indent: 20 });
     doc.moveDown(1);
 
-    // Footer
-    doc.fontSize(9).text('Dieses Dokument wurde automatisch generiert.', { align: 'center' });
-    doc.text('Roth GmbH | Kaiserslautern', { align: 'center' });
+    doc.fontSize(9).text('Automatisch generiert von Netlify Forms', { align: 'center' });
 
-    doc.pipe(stream);
     doc.end();
   });
 }
 
 // Zu GitHub committen
-async function commitToGithub(pdfPath, familienname, vorname) {
+async function commitToGithub(pdfBuffer, familienname, vorname) {
   try {
     const filename = `Einstellungsbogen_${familienname}_${vorname}_${new Date().toISOString().split('T')[0]}.pdf`;
-    const repoPath = process.env.GITHUB_REPO_PATH || '/tmp/roth-einstellungsbogen';
+    const repoPath = '/tmp/roth-repo';
     const submissionsDir = path.join(repoPath, 'submissions');
 
-    // Stelle sicher, dass das Verzeichnis existiert
+    // Repo klonen (falls nicht vorhanden)
+    if (!fs.existsSync(repoPath)) {
+      execSync(`git clone https://${process.env.GITHUB_TOKEN}@github.com/anhomei/roth-einstellungsbogen.git ${repoPath}`, { encoding: 'utf-8' });
+    }
+
+    // submissions-Ordner erstellen
     if (!fs.existsSync(submissionsDir)) {
       fs.mkdirSync(submissionsDir, { recursive: true });
     }
 
-    // Kopiere PDF ins submissions-Verzeichnis
+    // PDF schreiben
     const destPath = path.join(submissionsDir, filename);
-    fs.copyFileSync(pdfPath, destPath);
+    fs.writeFileSync(destPath, pdfBuffer);
 
     // Git Commit
+    execSync(`cd ${repoPath} && git config user.email "netlify@roth-gmbh.de" && git config user.name "Netlify Forms"`, { encoding: 'utf-8' });
     execSync(`cd ${repoPath} && git add submissions/${filename}`, { encoding: 'utf-8' });
-    execSync(`cd ${repoPath} && git config user.email "github-actions@roth-gmbh.de"`, { encoding: 'utf-8' });
-    execSync(`cd ${repoPath} && git config user.name "Netlify Bot"`, { encoding: 'utf-8' });
-    execSync(`cd ${repoPath} && git commit -m "Add: ${filename} (Netlify Forms Submission)"`, { encoding: 'utf-8' });
-    execSync(`cd ${repoPath} && git push origin main`, { encoding: 'utf-8' });
+    execSync(`cd ${repoPath} && git commit -m "Submission: ${filename}"`, { encoding: 'utf-8' });
+    execSync(`cd ${repoPath} && git push`, { encoding: 'utf-8' });
 
-    return { success: true, filename, message: `PDF committed: ${filename}` };
+    return { success: true, filename };
   } catch (error) {
-    console.error('Git Error:', error.message);
+    console.warn('Git warning:', error.message);
     return { success: false, error: error.message };
   }
 }
 
-// E-Mail senden
-async function sendEmail(data, familienname, vorname, filename, pdfPath) {
+// E-Mail mit PDF-Anhang senden
+async function sendEmail(data, familienname, vorname, filename, pdfBuffer) {
   try {
-    const pdfBuffer = fs.readFileSync(pdfPath);
-
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: 'andreas.meiser@rothgmbh-kl.de',
-      subject: `Neue Submission: ${familienname}, ${vorname}`,
+      subject: `✅ Neue Submission: ${vorname} ${familienname}`,
       html: `
         <h2>Neue Onboarding-Submission</h2>
         <p><strong>Mitarbeiter:</strong> ${vorname} ${familienname}</p>
@@ -128,9 +113,8 @@ async function sendEmail(data, familienname, vorname, filename, pdfPath) {
         <p><strong>Tätigkeit:</strong> ${data.taetigkeit || '-'}</p>
         <p><strong>Kontakt:</strong> ${data.telefon || '-'}</p>
         <hr>
-        <p><strong>Dateiname:</strong> ${filename}</p>
-        <p><a href="https://github.com/anhomei/roth-einstellungsbogen/blob/main/submissions/${filename}">PDF auch in GitHub verfügbar</a></p>
-        <p style="color: #999; font-size: 12px;">Diese E-Mail wurde automatisch von Netlify Forms generiert.</p>
+        <p>PDF als Anhang anbei.</p>
+        <p style="color: #999; font-size: 12px;">Auch verfügbar: https://github.com/anhomei/roth-einstellungsbogen/tree/main/submissions</p>
       `,
       attachments: [
         {
@@ -142,62 +126,46 @@ async function sendEmail(data, familienname, vorname, filename, pdfPath) {
     };
 
     await transporter.sendMail(mailOptions);
-    return { success: true, message: 'E-Mail mit PDF-Anhang gesendet' };
+    return { success: true };
   } catch (error) {
-    console.error('Email Error:', error.message);
+    console.error('Email error:', error.message);
     return { success: false, error: error.message };
   }
 }
 
-// Hauptfunktion
+// Main Handler
 exports.handler = async (event) => {
-  console.log('=== Netlify Forms Submission ===');
-
   try {
-    // Payload parsen
     const payload = JSON.parse(event.body);
     const data = payload.data || {};
 
-    console.log('Received data:', data);
-
-    // Validierung
     const familienname = (data.familienname || 'Unbekannt').replace(/[^a-zA-ZäöüßÄÖÜ\s-]/g, '');
     const vorname = (data.vorname || 'Unbekannt').replace(/[^a-zA-ZäöüßÄÖÜ\s-]/g, '');
+    const filename = `Einstellungsbogen_${familienname}_${vorname}_${new Date().toISOString().split('T')[0]}.pdf`;
 
-    // PDF generieren
-    const fileName = `Einstellungsbogen_${familienname}_${vorname}_temp.pdf`;
-    console.log('Generating PDF:', fileName);
-    const pdfPath = await generatePDF(data, fileName);
-    console.log('PDF created:', pdfPath);
+    console.log(`Processing: ${vorname} ${familienname}`);
 
-    // Zu GitHub committen (optional — kann fehlschlagen)
-    let gitResult = { success: false };
-    if (process.env.GITHUB_TOKEN) {
-      gitResult = await commitToGithub(pdfPath, familienname, vorname);
-      console.log('Git result:', gitResult);
-    } else {
-      console.log('GITHUB_TOKEN nicht gesetzt, überspringe Git Commit');
-    }
+    // PDF generieren (RAM)
+    const pdfBuffer = await generatePDFBuffer(data);
+    console.log(`PDF generated: ${pdfBuffer.length} bytes`);
 
     // E-Mail senden
-    const finalFilename = `Einstellungsbogen_${familienname}_${vorname}_${new Date().toISOString().split('T')[0]}.pdf`;
-    const emailResult = await sendEmail(data, familienname, vorname, finalFilename, pdfPath);
-    console.log('Email result:', emailResult);
+    const emailResult = await sendEmail(data, familienname, vorname, filename, pdfBuffer);
+    console.log(`Email sent:`, emailResult);
 
-    // Cleanup
-    try {
-      fs.unlinkSync(pdfPath);
-    } catch (e) {
-      // Ignoriere Fehler beim Löschen
-    }
+    // GitHub committen (optional)
+    const gitResult = process.env.GITHUB_TOKEN
+      ? await commitToGithub(pdfBuffer, familienname, vorname)
+      : { success: false, message: 'GITHUB_TOKEN not set' };
+    console.log(`GitHub:`, gitResult);
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: 'Submission verarbeitet',
-        filename: finalFilename,
-        git: gitResult,
-        email: emailResult
+        message: 'Submission erfolgreich verarbeitet',
+        filename: filename,
+        email: emailResult.success ? 'gesendet' : 'fehler',
+        github: gitResult.success ? 'committed' : 'übersprungen'
       })
     };
   } catch (error) {
