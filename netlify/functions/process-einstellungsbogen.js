@@ -113,8 +113,10 @@ async function commitToGithub(pdfPath, familienname, vorname) {
 }
 
 // E-Mail senden
-async function sendEmail(data, familienname, vorname, filename) {
+async function sendEmail(data, familienname, vorname, filename, pdfPath) {
   try {
+    const pdfBuffer = fs.readFileSync(pdfPath);
+
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: 'andreas.meiser@rothgmbh-kl.de',
@@ -127,13 +129,20 @@ async function sendEmail(data, familienname, vorname, filename) {
         <p><strong>Kontakt:</strong> ${data.telefon || '-'}</p>
         <hr>
         <p><strong>Dateiname:</strong> ${filename}</p>
-        <p><a href="https://github.com/anhomei/roth-einstellungsbogen/blob/main/submissions/${filename}">PDF in GitHub anschauen</a></p>
+        <p><a href="https://github.com/anhomei/roth-einstellungsbogen/blob/main/submissions/${filename}">PDF auch in GitHub verfügbar</a></p>
         <p style="color: #999; font-size: 12px;">Diese E-Mail wurde automatisch von Netlify Forms generiert.</p>
-      `
+      `,
+      attachments: [
+        {
+          filename: filename,
+          content: pdfBuffer,
+          contentType: 'application/pdf'
+        }
+      ]
     };
 
     await transporter.sendMail(mailOptions);
-    return { success: true, message: 'E-Mail gesendet' };
+    return { success: true, message: 'E-Mail mit PDF-Anhang gesendet' };
   } catch (error) {
     console.error('Email Error:', error.message);
     return { success: false, error: error.message };
@@ -172,7 +181,7 @@ exports.handler = async (event) => {
 
     // E-Mail senden
     const finalFilename = `Einstellungsbogen_${familienname}_${vorname}_${new Date().toISOString().split('T')[0]}.pdf`;
-    const emailResult = await sendEmail(data, familienname, vorname, finalFilename);
+    const emailResult = await sendEmail(data, familienname, vorname, finalFilename, pdfPath);
     console.log('Email result:', emailResult);
 
     // Cleanup
