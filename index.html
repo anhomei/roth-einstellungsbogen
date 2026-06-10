@@ -1132,6 +1132,7 @@
         </form>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         const form = document.getElementById('form');
         const progressFill = document.querySelector('.progress-fill');
@@ -1157,7 +1158,7 @@
         function validateVersicherungsnummer(value) {
             if (!value) return true;
             const cleaned = value.replace(/\s/g, '');
-            return /^\d{10}[A-Z]\d{3}$/.test(cleaned);
+            return /^\d{8}[A-Z]\d{3}$/.test(cleaned);
         }
 
         function validateFileSize(input) {
@@ -1318,7 +1319,27 @@
             }
 
             if (isFormValid) {
-                form.submit();
+                // PDF generieren
+                const familienname = document.getElementById('familienname').value;
+                const vorname = document.getElementById('vorname').value;
+                const datum = new Date().toISOString().split('T')[0];
+                const filename = `Einstellungsbogen_${familienname}_${vorname}_${datum}.pdf`;
+
+                const element = form;
+                const opt = {
+                    margin: 10,
+                    filename: filename,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+                };
+
+                html2pdf().set(opt).from(element).save().then(() => {
+                    // Nach PDF-Download: Form zu Netlify senden
+                    setTimeout(() => {
+                        form.submit();
+                    }, 500);
+                });
             } else {
                 const firstError = form.querySelector('.error-message.show');
                 if (firstError) {
