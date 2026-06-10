@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding-Formular — Roth GmbH</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            height: 60px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        form {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .section {
+            border-bottom: 1px solid #e5e5e5;
+            padding: 30px 20px;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-number {
+            background: #1a1a1a;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row.two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-row.three-col {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        @media (max-width: 600px) {
+            .form-row.two-col,
+            .form-row.three-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .required::after {
+            content: "*";
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="file"],
+        select,
+        textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        input[type="tel"]:focus,
+        input[type="file"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover,
+        .radio-item:hover {
+            background: #f5f5f5;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: #1a1a1a;
+        }
+
+        .checkbox-item label,
+        .radio-item label {
+            cursor: pointer;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .file-upload {
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-upload-label:hover {
+            border-color: #1a1a1a;
+            background: #f5f5f5;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-text {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .file-name {
+            font-size: 12px;
+            color: #27ae60;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .file-name.show {
+            display: block;
+        }
+
+        .honeypot {
+            display: none;
+        }
+
+        .form-actions {
+            padding: 30px 20px;
+            background: #f9f9f9;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .consent-section {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .consent-section input[type="checkbox"] {
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .consent-text {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .btn-submit {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #333;
+            box-shadow: 0 4px 12px rgba(26, 26, 26, 0.3);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-reset {
+            background: #e5e5e5;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #d5d5d5;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .form-group.error input,
+        .form-group.error select,
+        .form-group.error textarea {
+            border-color: #e74c3c;
+            background-color: #fadbd8;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #e5e5e5;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1a1a1a 0%, #333 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #2c3e50;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            button {
+                padding: 12px 20px;
+                font-size: 15px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100" height="100" fill="#1a1a1a" rx="10"/>
+                <text x="50" y="60" font-size="50" font-weight="bold" fill="white" text-anchor="middle" font-family="Arial, sans-serif">RG</text>
+            </svg>
+            <h1>Willkommen bei Roth GmbH</h1>
+            <p>Personalfragebogen zur Betriebsaufnahme</p>
+        </div>
+
+        <form name="einstellungsbogen" method="POST" data-netlify="true" enctype="multipart/form-data" id="form">
+            <!-- Honeypot -->
+            <input type="text" name="bot-field" class="honeypot" tabindex="-1" autocomplete="off">
+
+            <!-- KOPFDATEN -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-number">0</div>
+                    Allgemeine Angaben
+                </div>
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="eintrittsdatum" class="required">Eintrittsdatum</label>
+                        <input type="date" id="eintrittsdatum" name="eintrittsdatum" required>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="taetigkeit" class="required">Tätigkeit / Berufsbezeichnung</label>
+                        <input type="text" id="taetigkeit" name="taetigkeit" required>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. PERSÖNLICHE ANGABEN -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-number">1</div>
+                    Persönliche Angaben
+                </div>
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="familienname" class="required">Familienname</label>
+                        <input type="text" id="familienname" name="familienname" required>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="vorname" class="required">Vorname</label>
+                        <input type="text" id="vorname" name="vorname" required>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="geburtsname">Geburtsname (falls abweichend)</label>
+                        <input type="text" id="geburtsname" name="geburtsname">
+                    </div>
+                </div>
+
+                <div class="form-row three-col">
+                    <div class="form-group">
+                        <label for="geburtsdatum" class="required">Geburtsdatum</label>
+                        <input type="date" id="geburtsdatum" name="geburtsdatum" required>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="geburtsort" class="required">Geburtsort / -land</label>
+                        <input type="text" id="geburtsort" name="geburtsort" required>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="geschlecht" class="required">Geschlecht</label>
+                        <select id="geschlecht" name="geschlecht" required>
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="m">Männlich</option>
+                            <option value="w">Weiblich</option>
+                            <option value="d">Divers</option>
+                        </select>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="strasse" class="required">Straße und Hausnummer</label>
+                        <input type="text" id="strasse" name="strasse" required>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="plz" class="required">PLZ</label>
+                        <input type="text" id="plz" name="plz" required>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="ort" class="required">Ort</label>
+                        <input type="text" id="ort" name="ort" required>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="telefon" class="required">Telefon / Mobil</label>
+                        <input type="tel" id="telefon" name="telefon" required>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="required">E-Mail</label>
+                        <input type="email" id="email" name="email" required>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="staatsangehoerigkeit" class="required">Staatsangehörigkeit</label>
+                        <input type="text" id="staatsangehoerigkeit" name="staatsangehoerigkeit" required>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="familienstand">Familienstand</label>
+                        <select id="familienstand" name="familienstand">
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="ledig">Ledig</option>
+                            <option value="verheiratet">Verheiratet</option>
+                            <option value="geschieden">Geschieden</option>
+                            <option value="verwitwet">Verwitwet</option>
+                            <option value="lebenspartnerschaft">Lebenspartnerschaft</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="kinder">Anzahl Kinder unter 25 Jahren</label>
+                        <input type="number" id="kinder" name="kinder" min="0">
+                        <span class="help-text">Nachweis als Anlage hochladen</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="nicht_eu">Nicht-EU-Staatsangehörigkeit?</label>
+                        <select id="nicht_eu" name="nicht_eu">
+                            <option value="nein">Nein</option>
+                            <option value="ja">Ja</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="aufenthaltstitel_group" style="display: none;">
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label for="aufenthaltstitel" class="required">Aufenthaltstitel vorhanden?</label>
+                            <select id="aufenthaltstitel" name="aufenthaltstitel">
+                                <option value="">-- Bitte wählen --</option>
+                                <option value="ja">Ja</option>
+                                <option value="nein">Nein</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="aufenthaltstitel_gueltig" class="required">Gültig bis</label>
+                            <input type="date" id="aufenthaltstitel_gueltig" name="aufenthaltstitel_gueltig">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="schwerbehinderung">Schwerbehinderung / Gleichstellung?</label>
+                        <select id="schwerbehinderung" name="schwerbehinderung">
+                            <option value="nein">Nein</option>
+                            <option value="ja">Ja</option>
+                        </select>
+                        <span class="help-text">Freiwillige Angabe</span>
+                    </div>
+                </div>
+
+                <div id="schwerbehinderung_details" style="display: none;">
+                    <div class="form-row three-col">
+                        <div class="form-group">
+                            <label for="gdb">Grad der Behinderung (GdB)</label>
+                            <input type="number" id="gdb" name="gdb" min="0" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="gdb_gueltig">Gültig bis</label>
+                            <input type="date" id="gdb_gueltig" name="gdb_gueltig">
+                        </div>
+                        <div class="form-group">
+                            <label for="gdb_behoerde">Ausstellende Behörde</label>
+                            <input type="text" id="gdb_behoerde" name="gdb_behoerde">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. SOZIALVERSICHERUNG -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-number">2</div>
+                    Sozialversicherung
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="versicherungsnummer">Versicherungsnummer (Rente/Sozialversicherung)</label>
+                        <input type="text" id="versicherungsnummer" name="versicherungsnummer" placeholder="z. B. 12 123456 A 123" maxlength="15">
+                        <span class="help-text">Format: 12 Zeichen mit Leerzeichen (z. B. 12 123456 A 123)</span>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="krankenkasse" class="required">Krankenkasse (Name, Ort)</label>
+                        <input type="text" id="krankenkasse" name="krankenkasse" required>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="versicherungsstatus" class="required">Versicherungsstatus</label>
+                        <select id="versicherungsstatus" name="versicherungsstatus" required>
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="gesetzlich_pflicht">Gesetzlich pflichtversichert</option>
+                            <option value="gesetzlich_freiwillig">Freiwillig gesetzlich versichert</option>
+                            <option value="privat">Privat versichert</option>
+                        </select>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+
+                <div id="privat_versicherung_group" style="display: none;">
+                    <div class="info-box">
+                        Bitte laden Sie den Nachweis Ihrer privaten Krankenversicherung unter „Anlagen" hoch.
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="schulabschluss" class="required">Höchster Schulabschluss</label>
+                        <select id="schulabschluss" name="schulabschluss" required>
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="ohne">Ohne Abschluss</option>
+                            <option value="hauptschule">Haupt-/Volksschule</option>
+                            <option value="mittlere_reife">Mittlere Reife / Realschulabschluss</option>
+                            <option value="abitur">Abitur / Fachabitur</option>
+                        </select>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="berufsausbildung" class="required">Höchste Berufsausbildung</label>
+                        <select id="berufsausbildung" name="berufsausbildung" required>
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="ohne">Ohne Abschluss</option>
+                            <option value="anerkannte">Anerkannte Berufsausbildung</option>
+                            <option value="meister">Meister / Techniker</option>
+                            <option value="bachelor">Bachelor</option>
+                            <option value="diplom">Diplom / Master</option>
+                            <option value="promotion">Promotion</option>
+                        </select>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. STEUERLICHE ANGABEN -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-number">3</div>
+                    Steuerliche Angaben
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="steuer_id" class="required">Steuer-Identifikationsnummer</label>
+                        <input type="text" id="steuer_id" name="steuer_id" placeholder="11 Ziffern" maxlength="11" required>
+                        <span class="help-text">Genau 11 Ziffern (z. B. 12 345 678 901)</span>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="steuerklasse">Steuerklasse / Faktor</label>
+                        <input type="text" id="steuerklasse" name="steuerklasse" placeholder="z. B. I">
+                    </div>
+                    <div class="form-group">
+                        <label for="konfession">Konfession</label>
+                        <select id="konfession" name="konfession">
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="keine">Keine / Ausgetreten</option>
+                            <option value="evangelisch">Evangelisch</option>
+                            <option value="katholisch">Katholisch</option>
+                            <option value="andere">Andere</option>
+                        </select>
+                        <span class="help-text">Freiwillige Angabe (für Kirchensteuer)</span>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="kinderfreibetraege">Kinderfreibeträge</label>
+                        <input type="number" id="kinderfreibetraege" name="kinderfreibetraege" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="steuer_ids_kinder">Steuer-IDs der Kinder liegen vor?</label>
+                        <select id="steuer_ids_kinder" name="steuer_ids_kinder">
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="ja">Ja</option>
+                            <option value="nein">Nein</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. BESCHÄFTIGUNGSVERHÄLTNIS -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-number">4</div>
+                    Beschäftigungsverhältnis
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="arbeitnehmergruppe" class="required">Arbeitnehmergruppe</label>
+                        <select id="arbeitnehmergruppe" name="arbeitnehmergruppe" required>
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="gewerblich">Gewerblicher Arbeitnehmer</option>
+                            <option value="angestellter">Angestellter</option>
+                            <option value="polier">Polier</option>
+                            <option value="auszubildender">Auszubildender</option>
+                            <option value="aushilfe">Aushilfe / Minijob</option>
+                        </select>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="befristung">Befristung</label>
+                        <select id="befristung" name="befristung">
+                            <option value="unbefristet">Unbefristet</option>
+                            <option value="befristet">Befristet bis</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="befristet_bis_group" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="befristet_bis" class="required">Befristet bis</label>
+                            <input type="date" id="befristet_bis" name="befristet_bis">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="probezeit">Probezeit</label>
+                        <select id="probezeit" name="probezeit">
+                            <option value="nein">Nein</option>
+                            <option value="ja">Ja</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="probezeit_dauer" id="probezeit_dauer_label">Dauer (z. B. 6 Monate)</label>
+                        <input type="text" id="probezeit_dauer" name="probezeit_dauer" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="arbeitszeit">Wöchentliche Arbeitszeit (Stunden)</label>
+                        <input type="number" id="arbeitszeit" name="arbeitszeit" step="0.5" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="hauptbeschaeftigung" class="required">Hauptbeschäftigung (erstes Verhältnis)?</label>
+                        <select id="hauptbeschaeftigung" name="hauptbeschaeftigung" required>
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="ja">Ja</option>
+                            <option value="nein">Nein</option>
+                        </select>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weitere_beschaeftigungen">Weitere Beschäftigungen bei anderen Arbeitgebern?</label>
+                        <textarea id="weitere_beschaeftigungen" name="weitere_beschaeftigungen" placeholder="Arbeitgeber, Art und Umfang"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="vorbeschaeftigungen">Vorbeschäftigungen im laufenden Kalenderjahr</label>
+                        <textarea id="vorbeschaeftigungen" name="vorbeschaeftigungen" placeholder="Arbeitgeber, Zeitraum"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="baugewerbe">Bereits im Baugewerbe beschäftigt?</label>
+                        <select id="baugewerbe" name="baugewerbe">
+                            <option value="nein">Nein</option>
+                            <option value="ja">Ja</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="soka_bau_group" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="soka_bau_nr">SOKA-BAU-Arbeitnehmernummer</label>
+                            <input type="text" id="soka_bau_nr" name="soka_bau_nr">
+                            <span class="help-text">Urlaubsnachweis unter „Anlagen" hochladen</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sozialleistungen">Bezug von Renten- oder Sozialleistungen (z. B. Rente, ALG)?</label>
+                        <select id="sozialleistungen" name="sozialleistungen">
+                            <option value="nein">Nein</option>
+                            <option value="ja">Ja</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="sozialleistungen_art_group" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sozialleistungen_art">Art der Leistung</label>
+                            <input type="text" id="sozialleistungen_art" name="sozialleistungen_art">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. QUALIFIKATIONEN -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-number">5</div>
+                    Qualifikationen & Nachweise
+                </div>
+
+                <div class="form-group">
+                    <label>Führerscheinklassen (Mehrfachauswahl)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fs_b" name="fuehrerschein" value="B">
+                            <label for="fs_b">Klasse B</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fs_be" name="fuehrerschein" value="BE">
+                            <label for="fs_be">Klasse BE</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fs_c1" name="fuehrerschein" value="C1">
+                            <label for="fs_c1">Klasse C1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fs_c1e" name="fuehrerschein" value="C1E">
+                            <label for="fs_c1e">Klasse C1E</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fs_c" name="fuehrerschein" value="C">
+                            <label for="fs_c">Klasse C</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fs_ce" name="fuehrerschein" value="CE">
+                            <label for="fs_ce">Klasse CE</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fs_t" name="fuehrerschein" value="T">
+                            <label for="fs_t">Klasse T</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fs_gueltig">Führerschein gültig bis</label>
+                        <input type="date" id="fs_gueltig" name="fs_gueltig">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="maschinen_nachweise">Maschinen-/Gerätenachweise</label>
+                        <textarea id="maschinen_nachweise" name="maschinen_nachweise" placeholder="z. B. Baggerschein, Kran, Stapler, etc."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Weitere Nachweise (Mehrfachauswahl)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="schweisser" name="weitere_nachweise" value="Schweißerprüfung">
+                            <label for="schweisser">Schweißerprüfung</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="scc_sgu" name="weitere_nachweise" value="SCC-SGU">
+                            <label for="scc_sgu">SCC-SGU</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="erste_hilfe" name="weitere_nachweise" value="Erste-Hilfe-Kurs">
+                            <label for="erste_hilfe">Erste-Hilfe-Kurs</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sonstiges_nachweis" name="weitere_nachweise" value="Sonstiges">
+                            <label for="sonstiges_nachweis">Sonstiges</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="weitere_nachweise_text_group" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="weitere_nachweise_text">Bitte erläutern</label>
+                            <input type="text" id="weitere_nachweise_text" name="weitere_nachweise_text">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="arbeitsmed_vorsorge">Arbeitsmedizinische Vorsorge vorhanden?</label>
+                        <select id="arbeitsmed_vorsorge" name="arbeitsmed_vorsorge">
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="ja">Ja</option>
+                            <option value="nein">Nein</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="arbeitsmed_datum">Datum</label>
+                        <input type="date" id="arbeitsmed_datum" name="arbeitsmed_datum">
+                    </div>
+                </div>
+
+                <div class="form-row three-col">
+                    <div class="form-group">
+                        <label for="schuhgroesse">Schuhgröße</label>
+                        <input type="text" id="schuhgroesse" name="schuhgroesse" placeholder="z. B. 42">
+                    </div>
+                    <div class="form-group">
+                        <label for="kleidung">Kleidergröße (Jacke)</label>
+                        <input type="text" id="kleidung" name="kleidung" placeholder="z. B. M">
+                    </div>
+                    <div class="form-group">
+                        <label for="handschuhe">Handschuhgröße</label>
+                        <input type="text" id="handschuhe" name="handschuhe" placeholder="z. B. 9">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. BANKVERBINDUNG -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-number">6</div>
+                    Bankverbindung & Vermögenswirksame Leistungen
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="iban" class="required">IBAN</label>
+                        <input type="text" id="iban" name="iban" placeholder="DE + 20 Ziffern" maxlength="22" required>
+                        <span class="help-text">Format: DE + 20 Ziffern (z. B. DE89370400440532013000)</span>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="bank">Bank / BIC</label>
+                        <input type="text" id="bank" name="bank">
+                    </div>
+                    <div class="form-group">
+                        <label for="kontoinhaber">Kontoinhaber (falls abweichend)</label>
+                        <input type="text" id="kontoinhaber" name="kontoinhaber">
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="vwl">VWL-Vertrag vorhanden?</label>
+                        <select id="vwl" name="vwl">
+                            <option value="nein">Nein</option>
+                            <option value="ja">Ja</option>
+                        </select>
+                        <span class="help-text">Bescheinigung unter „Anlagen" hochladen</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="betriebliche_altersvorsorge">Betriebliche Altersvorsorge / Entgeltumwandlung?</label>
+                        <select id="betriebliche_altersvorsorge" name="betriebliche_altersvorsorge">
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="ja">Ja</option>
+                            <option value="nein">Nein</option>
+                        </select>
+                        <span class="help-text">Tarifliche Zusatzversorgung Bau läuft über SOKA-BAU</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. NOTFALLKONTAKT -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-number">7</div>
+                    Notfallkontakt
+                </div>
+                <div class="info-box">
+                    Alle Felder in diesem Abschnitt sind freiwillig.
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="notfall_name">Name</label>
+                        <input type="text" id="notfall_name" name="notfall_name">
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label for="notfall_verhaeltnis">Verhältnis (z. B. Ehepartner)</label>
+                        <input type="text" id="notfall_verhaeltnis" name="notfall_verhaeltnis">
+                    </div>
+                    <div class="form-group">
+                        <label for="notfall_telefon">Telefon</label>
+                        <input type="tel" id="notfall_telefon" name="notfall_telefon">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. ANLAGEN -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-number">8</div>
+                    Anlagen (Dateien hochladen)
+                </div>
+                <div class="info-box">
+                    Maximal 8 MB pro Datei. Unterstützte Formate: PDF, JPG, PNG
+                </div>
+
+                <div class="form-group">
+                    <label for="anlage_steuer_id">Nachweis Steuer-ID</label>
+                    <div class="file-upload">
+                        <label for="anlage_steuer_id" class="file-upload-label">
+                            <div class="file-upload-text">
+                                📄 Klicken zum Hochladen oder Datei hierherziehen
+                            </div>
+                        </label>
+                        <input type="file" id="anlage_steuer_id" name="anlage_steuer_id" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="anlage_sv">SV-Meldebescheinigung / Versicherungsnummer</label>
+                    <div class="file-upload">
+                        <label for="anlage_sv" class="file-upload-label">
+                            <div class="file-upload-text">
+                                📄 Klicken zum Hochladen oder Datei hierherziehen
+                            </div>
+                        </label>
+                        <input type="file" id="anlage_sv" name="anlage_sv" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="anlage_krankenkasse">Mitgliedsbescheinigung Krankenkasse</label>
+                    <div class="file-upload">
+                        <label for="anlage_krankenkasse" class="file-upload-label">
+                            <div class="file-upload-text">
+                                📄 Klicken zum Hochladen oder Datei hierherziehen
+                            </div>
+                        </label>
+                        <input type="file" id="anlage_krankenkasse" name="anlage_krankenkasse" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="anlage_kinder">Nachweis Kinder unter 25 Jahren (Geburtsurkunde o. Ä.)</label>
+                    <div class="file-upload">
+                        <label for="anlage_kinder" class="file-upload-label">
+                            <div class="file-upload-text">
+                                📄 Klicken zum Hochladen oder Datei hierherziehen
+                            </div>
+                        </label>
+                        <input type="file" id="anlage_kinder" name="anlage_kinder" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="anlage_aufenthalt">Aufenthaltstitel / Arbeitserlaubnis (falls zutreffend)</label>
+                    <div class="file-upload">
+                        <label for="anlage_aufenthalt" class="file-upload-label">
+                            <div class="file-upload-text">
+                                📄 Klicken zum Hochladen oder Datei hierherziehen
+                            </div>
+                        </label>
+                        <input type="file" id="anlage_aufenthalt" name="anlage_aufenthalt" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="anlage_fuehrerschein">Führerschein (Vorder-/Rückseite) & Maschinennachweise</label>
+                    <div class="file-upload">
+                        <label for="anlage_fuehrerschein" class="file-upload-label">
+                            <div class="file-upload-text">
+                                📄 Klicken zum Hochladen oder Datei hierherziehen
+                            </div>
+                        </label>
+                        <input type="file" id="anlage_fuehrerschein" name="anlage_fuehrerschein" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="anlage_qualifikation">Qualifikations-/Ausbildungsnachweise, Zeugnisse</label>
+                    <div class="file-upload">
+                        <label for="anlage_qualifikation" class="file-upload-label">
+                            <div class="file-upload-text">
+                                📄 Klicken zum Hochladen oder Datei hierherziehen
+                            </div>
+                        </label>
+                        <input type="file" id="anlage_qualifikation" name="anlage_qualifikation" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="anlage_soka_bau">SOKA-BAU-Urlaubsnachweis (falls vorhanden)</label>
+                    <div class="file-upload">
+                        <label for="anlage_soka_bau" class="file-upload-label">
+                            <div class="file-upload-text">
+                                📄 Klicken zum Hochladen oder Datei hierherziehen
+                            </div>
+                        </label>
+                        <input type="file" id="anlage_soka_bau" name="anlage_soka_bau" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="anlage_vwl">VWL-Bescheinigung des Anbieters (falls zutreffend)</label>
+                    <div class="file-upload">
+                        <label for="anlage_vwl" class="file-upload-label">
+                            <div class="file-upload-text">
+                                📄 Klicken zum Hochladen oder Datei hierherziehen
+                            </div>
+                        </label>
+                        <input type="file" id="anlage_vwl" name="anlage_vwl" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="anlage_privat_versich">Nachweis private Krankenversicherung (falls zutreffend)</label>
+                    <div class="file-upload">
+                        <label for="anlage_privat_versich" class="file-upload-label">
+                            <div class="file-upload-text">
+                                📄 Klicken zum Hochladen oder Datei hierherziehen
+                            </div>
+                        </label>
+                        <input type="file" id="anlage_privat_versich" name="anlage_privat_versich" accept=".pdf,.jpg,.jpeg,.png" data-max-size="8388608">
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. ERKLÄRUNG UND DATENSCHUTZ -->
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-number">10</div>
+                    Erklärung & Datenschutz
+                </div>
+
+                <div class="consent-section">
+                    <input type="checkbox" id="consent" name="consent" required>
+                    <div class="consent-text">
+                        Ich versichere, dass die vorstehenden Angaben vollständig und richtig sind. Änderungen (z. B. Anschrift, Krankenkasse, Steuerklasse, Familienstand, weitere Beschäftigungen) teile ich dem Arbeitgeber unverzüglich mit. Mir ist bekannt, dass die Daten ausschließlich zur Durchführung des Beschäftigungsverhältnisses, der Lohnabrechnung sowie zur Erfüllung gesetzlicher Melde- und Nachweispflichten (Sozialversicherung, Finanzverwaltung, SOKA-BAU, BG BAU) gemäß Art. 6 Abs. 1 lit. b und c DSGVO i. V. m. § 26 BDSG verarbeitet und nach Ablauf der gesetzlichen Aufbewahrungsfristen gelöscht werden. Die Angaben zu Schwerbehinderung, Konfession und Notfallkontakt sind freiwillig.
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORM ACTIONS -->
+            <div class="form-actions">
+                <div class="button-group">
+                    <button type="submit" class="btn-submit">Formular absenden</button>
+                    <button type="reset" class="btn-reset">Zurücksetzen</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('form');
+        const progressFill = document.querySelector('.progress-fill');
+        const consentCheckbox = document.getElementById('consent');
+
+        // Conditional visibility helpers
+        function toggleElement(trigger, target, triggerValue) {
+            const element = document.getElementById(target);
+            if (element) {
+                element.style.display = trigger.value === triggerValue ? 'block' : 'none';
+            }
+        }
+
+        // Steuer-ID validation (11 digits)
+        function validateSteuerId(value) {
+            const cleaned = value.replace(/\s/g, '');
+            return /^\d{11}$/.test(cleaned);
+        }
+
+        // IBAN validation (DE + 20 digits)
+        function validateIBAN(value) {
+            const cleaned = value.replace(/\s/g, '').toUpperCase();
+            return /^DE\d{20}$/.test(cleaned);
+        }
+
+        // Versicherungsnummer validation (12 chars with spaces)
+        function validateVersicherungsnummer(value) {
+            if (!value) return true; // Optional
+            const cleaned = value.replace(/\s/g, '');
+            return /^\d{10}[A-Z]\d{3}$/.test(cleaned);
+        }
+
+        // File size validation
+        function validateFileSize(input) {
+            if (!input.files.length) return true;
+            const file = input.files[0];
+            const maxSize = parseInt(input.getAttribute('data-max-size'), 10);
+            return file.size <= maxSize;
+        }
+
+        // Form validation
+        function validateField(field) {
+            const errorElement = field.parentElement.querySelector('.error-message');
+            field.parentElement.classList.remove('error');
+
+            if (!errorElement) return true;
+
+            let isValid = true;
+            let errorMsg = '';
+
+            if (field.hasAttribute('required') && !field.value.trim()) {
+                isValid = false;
+                errorMsg = 'Dieses Feld ist erforderlich';
+            } else if (field.id === 'steuer_id' && field.value) {
+                if (!validateSteuerId(field.value)) {
+                    isValid = false;
+                    errorMsg = 'Steuer-ID muss genau 11 Ziffern enthalten';
+                }
+            } else if (field.id === 'iban' && field.value) {
+                if (!validateIBAN(field.value)) {
+                    isValid = false;
+                    errorMsg = 'IBAN-Format ungültig (DE + 20 Ziffern)';
+                }
+            } else if (field.id === 'versicherungsnummer' && field.value) {
+                if (!validateVersicherungsnummer(field.value)) {
+                    isValid = false;
+                    errorMsg = 'Format: 12 Zeichen (z. B. 12 123456 A 123)';
+                }
+            } else if (field.type === 'email' && field.value) {
+                if (!field.value.includes('@')) {
+                    isValid = false;
+                    errorMsg = 'Gültige E-Mail erforderlich';
+                }
+            }
+
+            if (!isValid) {
+                field.parentElement.classList.add('error');
+                errorElement.textContent = errorMsg;
+                errorElement.classList.add('show');
+            }
+
+            return isValid;
+        }
+
+        // File validation
+        function validateFileInput(input) {
+            if (!input.files.length) return true;
+            if (!validateFileSize(input)) {
+                const errorElement = input.parentElement.querySelector('.error-message') || input.parentElement.querySelector('.file-name');
+                if (errorElement) {
+                    errorElement.textContent = 'Datei zu groß (max. 8 MB)';
+                    errorElement.classList.add('show');
+                }
+                return false;
+            }
+            return true;
+        }
+
+        // File upload display
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const fileNameElement = input.parentElement.querySelector('.file-name');
+                if (fileNameElement) {
+                    if (input.files.length) {
+                        fileNameElement.textContent = '✓ ' + input.files[0].name;
+                        fileNameElement.classList.add('show');
+                        validateFileInput(input);
+                    } else {
+                        fileNameElement.classList.remove('show');
+                    }
+                }
+            });
+        });
+
+        // Conditional field visibility
+        document.getElementById('nicht_eu').addEventListener('change', (e) => {
+            toggleElement(e.target, 'aufenthaltstitel_group', 'ja');
+        });
+
+        document.getElementById('schwerbehinderung').addEventListener('change', (e) => {
+            toggleElement(e.target, 'schwerbehinderung_details', 'ja');
+        });
+
+        document.getElementById('versicherungsstatus').addEventListener('change', (e) => {
+            toggleElement(e.target, 'privat_versicherung_group', 'privat');
+        });
+
+        document.getElementById('befristung').addEventListener('change', (e) => {
+            toggleElement(e.target, 'befristet_bis_group', 'befristet');
+        });
+
+        document.getElementById('probezeit').addEventListener('change', (e) => {
+            const durationInput = document.getElementById('probezeit_dauer');
+            if (durationInput) {
+                durationInput.style.display = e.target.value === 'ja' ? 'block' : 'none';
+            }
+        });
+
+        document.getElementById('baugewerbe').addEventListener('change', (e) => {
+            toggleElement(e.target, 'soka_bau_group', 'ja');
+        });
+
+        document.getElementById('sozialleistungen').addEventListener('change', (e) => {
+            toggleElement(e.target, 'sozialleistungen_art_group', 'ja');
+        });
+
+        document.getElementById('sonstiges_nachweis').addEventListener('change', (e) => {
+            const textGroup = document.getElementById('weitere_nachweise_text_group');
+            if (textGroup) {
+                textGroup.style.display = e.target.checked ? 'block' : 'none';
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Validate all required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            let isFormValid = true;
+
+            requiredFields.forEach(field => {
+                if (!validateField(field)) {
+                    isFormValid = false;
+                }
+            });
+
+            // Validate optional fields with format constraints
+            const optionalValidations = [
+                { field: document.getElementById('steuer_id'), validator: validateSteuerId },
+                { field: document.getElementById('iban'), validator: validateIBAN },
+                { field: document.getElementById('versicherungsnummer'), validator: validateVersicherungsnummer }
+            ];
+
+            optionalValidations.forEach(({ field, validator }) => {
+                if (field && field.value && !validator(field.value)) {
+                    if (!validateField(field)) {
+                        isFormValid = false;
+                    }
+                }
+            });
+
+            // Validate file sizes
+            document.querySelectorAll('input[type="file"]').forEach(input => {
+                if (!validateFileInput(input)) {
+                    isFormValid = false;
+                }
+            });
+
+            // Validate consent
+            if (!consentCheckbox.checked) {
+                consentCheckbox.parentElement.classList.add('error');
+                const errorMsg = consentCheckbox.parentElement.querySelector('.error-message');
+                if (errorMsg) {
+                    errorMsg.textContent = 'Sie müssen den Bedingungen zustimmen';
+                    errorMsg.classList.add('show');
+                }
+                isFormValid = false;
+            } else {
+                consentCheckbox.parentElement.classList.remove('error');
+            }
+
+            if (isFormValid) {
+                // Submit form to Netlify
+                form.submit();
+            } else {
+                // Scroll to first error
+                const firstError = form.querySelector('.error-message.show');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
+        // Real-time validation on blur
+        document.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('blur', () => {
+                if (field.hasAttribute('required') || field.id === 'steuer_id' || field.id === 'iban' || field.id === 'versicherungsnummer') {
+                    validateField(field);
+                }
+            });
+        });
+
+        // Progress bar
+        function updateProgress() {
+            const totalFields = form.querySelectorAll('input[required], select[required], textarea[required]').length;
+            const filledFields = Array.from(form.querySelectorAll('input[required], select[required], textarea[required]')).filter(field => field.value.trim()).length;
+            const progress = totalFields ? (filledFields / totalFields) * 100 : 0;
+            progressFill.style.width = Math.min(progress, 95) + '%';
+        }
+
+        form.addEventListener('input', updateProgress);
+        form.addEventListener('change', updateProgress);
+
+        // Drag and drop for files
+        document.querySelectorAll('.file-upload').forEach(upload => {
+            const input = upload.querySelector('input[type="file"]');
+            const label = upload.querySelector('.file-upload-label');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                upload.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                upload.addEventListener(eventName, () => {
+                    label.style.borderColor = '#1a1a1a';
+                    label.style.background = '#f5f5f5';
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                upload.addEventListener(eventName, () => {
+                    label.style.borderColor = '#ddd';
+                    label.style.background = '#fafafa';
+                });
+            });
+
+            upload.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                input.files = files;
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+        });
+    </script>
+</body>
+</html>
