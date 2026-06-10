@@ -1275,6 +1275,8 @@
                 field.parentElement.classList.add('error');
                 errorElement.textContent = errorMsg;
                 errorElement.classList.add('show');
+            } else {
+                errorElement.classList.remove('show');
             }
 
             return isValid;
