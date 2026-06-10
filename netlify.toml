@@ -1,0 +1,12 @@
+[build]
+command = "npm install"
+functions = "netlify/functions"
+publish = "."
+
+[[redirects]]
+from = "/danke"
+to = "/danke.html"
+status = 200
+
+[functions."process-einstellungsbogen"]
+events = ["netlify-forms:submission"]
